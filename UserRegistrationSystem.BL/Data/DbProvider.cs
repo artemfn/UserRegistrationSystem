@@ -10,33 +10,53 @@ namespace UserRegistrationSystem.BL.Data
     {
         private readonly UserRegistrationSystemContext _context = new UserRegistrationSystemContext();
 
-
+        /// <summary>
+        /// Determines the context of the database.
+        /// </summary>
         public UserRegistrationSystemContext DbContext => _context;
+        /// <summary>
+        /// Defines that the changes will be saved to the database or not.
+        /// </summary>
         public bool IsEnabled { get; set; } = false;
 
-
-        public void Save(T user)
+        /// <summary>
+        /// Saves an object to the database.
+        /// </summary>
+        /// <param name="obj">A saving object.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void Save(T obj)
         {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
 
-            if (user is User)
-                _context.Users.Add(user as User);
+            if (obj is User)
+                _context.Users.Add(obj as User);
 
-            else if (user is Admin)
-                _context.Admins.Add(user as Admin);
+            else if (obj is Admin)
+                _context.Admins.Add(obj as Admin);
 
 
             if (IsEnabled)
                 _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Loads an object from the database of type <see cref="T"/>.
+        /// </summary>
+        /// <returns>Loaded object.</returns>
         public IEnumerable<T> Load()
         {
             return _context.Set<T>();
         }
 
+        /// <summary>
+        /// Finds a user in the database by a name and a password.
+        /// </summary>
+        /// <param name="name">A name of finding user.</param>
+        /// <param name="password">A password of finding user.</param>
+        /// <returns>Found user.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public T Find(string name, string password)
         {
             if (string.IsNullOrEmpty(name))
@@ -50,6 +70,14 @@ namespace UserRegistrationSystem.BL.Data
                 (u => u.Name == name && u.Password == password);
         }
 
+        /// <summary>
+        /// Finds an admin  in the database by a name, a password and a identification key.
+        /// </summary>
+        /// <param name="name">A name of finding admin.</param>
+        /// <param name="password">A password of finding admin.</param>
+        /// <param name="key">An identification key of finding admin.</param>
+        /// <returns>Found admin.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public Admin Find(string name, string password, string key)
         {
             if (string.IsNullOrEmpty(name))
@@ -66,13 +94,18 @@ namespace UserRegistrationSystem.BL.Data
                 (a => a.Name == name && a.Password == password && a.IdentificationKey == key);
         }
 
-        public void Delete(T user)
+        /// <summary>
+        /// Delete an object from the database.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void Delete(T obj)
         {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
 
-            _context.Set<T>().Remove(user);
+            _context.Set<T>().Remove(obj);
 
             if (IsEnabled)
                 _context.SaveChanges();

@@ -12,7 +12,7 @@ namespace UserRegistrationSystem.UI
     {
         private readonly string _loginHistoryFilePath = "LogInHistory";
 
-        private readonly SerializationProvider<List<NamePasswordPair>> _serializationProvider = new SerializationProvider<List<NamePasswordPair>>();
+        private readonly JsonSerializationProvider<List<NamePasswordPair>> _serializationProvider = new JsonSerializationProvider<List<NamePasswordPair>>();
         private readonly DbProvider<User> _dbProvider = new DbProvider<User>();
 
         private User _currentUser;

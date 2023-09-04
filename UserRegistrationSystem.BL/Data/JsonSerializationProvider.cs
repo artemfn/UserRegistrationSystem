@@ -5,12 +5,22 @@ using System.Runtime.Serialization.Json;
 
 namespace UserRegistrationSystem.BL.Data
 {
-    public class SerializationProvider<T>
+    /// <summary>
+    /// Implements protected connection to json files.
+    /// </summary>
+    /// <typeparam name="T">A type of serializing data.</typeparam>
+    public class JsonSerializationProvider<T>
         where T : class
     {
         private readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(T));
 
-
+        /// <summary>
+        /// Saves data to the json file.
+        /// If file is not exists, creates and saves.
+        /// </summary>
+        /// <param name="obj">A serializing data.</param>
+        /// <param name="path">A path to the file.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void Save(T obj, string path)
         {
             if (obj == null)
@@ -26,6 +36,12 @@ namespace UserRegistrationSystem.BL.Data
             }
         }
 
+        /// <summary>
+        /// Loads data from the json file.
+        /// </summary>
+        /// <param name="path">a path to the file.</param>
+        /// <returns>Loaded data.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public T Load(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -45,6 +61,12 @@ namespace UserRegistrationSystem.BL.Data
             }
         }
 
+        /// <summary>
+        /// Deletes the file.
+        /// </summary>
+        /// <param name="path">A path to the file.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public void Delete(string path)
         {
             if (string.IsNullOrEmpty(path))
